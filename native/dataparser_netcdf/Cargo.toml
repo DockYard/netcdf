@@ -1,0 +1,16 @@
+[package]
+name = "dataparser_netcdf"
+version = "0.1.0"
+authors = []
+edition = "2018"
+
+[lib]
+name = "dataparser_netcdf"
+path = "src/lib.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+rustler = "0.26.0"
+netcdf = "0.7.0"
+thiserror = "1"
+anyhow = "1"
