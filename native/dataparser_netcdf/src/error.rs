@@ -3,7 +3,8 @@ use thiserror::Error;
 
 rustler::atoms! {
     ok,
-    error
+    error,
+    not_found
 }
 
 #[derive(Error, Debug)]
@@ -18,10 +19,15 @@ pub enum NetCDFError {
     TryFromInt(#[from] std::num::TryFromIntError),
     #[error(transparent)]
     Unknown(#[from] anyhow::Error),
+    #[error("not_found")]
+    NotFound(),
 }
 
 impl Encoder for NetCDFError {
     fn encode<'b>(&self, env: Env<'b>) -> Term<'b> {
-        format!("{:?}", self).encode(env)
+        match self {
+            Self::NotFound() => not_found().encode(env),
+            _ => format!("{:?}", self).encode(env),
+        }
     }
 }

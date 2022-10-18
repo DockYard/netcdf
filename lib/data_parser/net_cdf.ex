@@ -5,6 +5,7 @@ defmodule DataParser.NetCDF do
   def open_file(_filename), do: :erlang.nif_error(:nif_not_loaded)
   def get_file_variables(_file_handle), do: :erlang.nif_error(:nif_not_loaded)
   def load_variable(_file_handle, _variable_name), do: :erlang.nif_error(:nif_not_loaded)
+  def load_raw_variable(_file_handle, _variable_name), do: :erlang.nif_error(:nif_not_loaded)
 
   def get_variable_attributes(_file_handle, _variable_name),
     do: :erlang.nif_error(:nif_not_loaded)
