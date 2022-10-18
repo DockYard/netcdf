@@ -21,7 +21,8 @@ defmodule DataParser.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:rustler, "~> 0.26.0"}
+      {:rustler, "~> 0.26.0"},
+      {:nx, "~> 0.3"}
     ]
   end
 end

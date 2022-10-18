@@ -3,16 +3,18 @@ defmodule DataParser do
   Documentation for `DataParser`.
   """
 
-  @doc """
-  Hello world.
+  alias DataParser.NetCDF
 
-  ## Examples
+  def netcdf_to_tensors(filename) do
+    with {:ok, file} <- NetCDF.open_file(filename),
+         {:ok, var_names} <- NetCDF.get_file_variables(file) do
+      tensors =
+        for var_name <- var_names, into: %{} do
+          {:ok, values} = NetCDF.load_variable(file, var_name)
+          {var_name, Nx.tensor(values)}
+        end
 
-      iex> DataParser.hello()
-      :world
-
-  """
-  def hello do
-    :world
+      {:ok, tensors}
+    end
   end
 end
