@@ -1,4 +1,4 @@
-use netcdf::attribute;
+use netcdf::attribute::AttrValue;
 use netcdf::file::File;
 use rustler::{Env, NifStruct, ResourceArc, Term};
 
@@ -30,7 +30,7 @@ impl ExNetCDFFile {
     }
 }
 
-pub enum AttrValue {
+pub enum Value {
     Atom(rustler::types::atom::Atom),
     Uchar(u8),
     Schar(i8),
@@ -56,62 +56,62 @@ pub enum AttrValue {
     Strs(Vec<String>),
 }
 
-impl rustler::Encoder for AttrValue {
+impl rustler::Encoder for Value {
     fn encode<'b>(&self, env: Env<'b>) -> Term<'b> {
         let result = match self {
-            AttrValue::Atom(atom) => atom.encode(env),
-            AttrValue::Uchar(x) => x.encode(env),
-            AttrValue::Schar(x) => x.encode(env),
-            AttrValue::Ushort(x) => x.encode(env),
-            AttrValue::Short(x) => x.encode(env),
-            AttrValue::Uint(x) => x.encode(env),
-            AttrValue::Int(x) => x.encode(env),
-            AttrValue::Ulonglong(x) => x.encode(env),
-            AttrValue::Longlong(x) => x.encode(env),
-            AttrValue::Float(x) => x.encode(env),
-            AttrValue::Double(x) => x.encode(env),
-            AttrValue::Str(x) => x.encode(env),
-            AttrValue::Uchars(x) => x.encode(env),
-            AttrValue::Schars(x) => x.encode(env),
-            AttrValue::Ushorts(x) => x.encode(env),
-            AttrValue::Shorts(x) => x.encode(env),
-            AttrValue::Uints(x) => x.encode(env),
-            AttrValue::Ints(x) => x.encode(env),
-            AttrValue::Ulonglongs(x) => x.encode(env),
-            AttrValue::Longlongs(x) => x.encode(env),
-            AttrValue::Floats(x) => x.encode(env),
-            AttrValue::Doubles(x) => x.encode(env),
-            AttrValue::Strs(x) => x.encode(env),
+            Self::Atom(atom) => atom.encode(env),
+            Self::Uchar(x) => x.encode(env),
+            Self::Schar(x) => x.encode(env),
+            Self::Ushort(x) => x.encode(env),
+            Self::Short(x) => x.encode(env),
+            Self::Uint(x) => x.encode(env),
+            Self::Int(x) => x.encode(env),
+            Self::Ulonglong(x) => x.encode(env),
+            Self::Longlong(x) => x.encode(env),
+            Self::Float(x) => x.encode(env),
+            Self::Double(x) => x.encode(env),
+            Self::Str(x) => x.encode(env),
+            Self::Uchars(x) => x.encode(env),
+            Self::Schars(x) => x.encode(env),
+            Self::Ushorts(x) => x.encode(env),
+            Self::Shorts(x) => x.encode(env),
+            Self::Uints(x) => x.encode(env),
+            Self::Ints(x) => x.encode(env),
+            Self::Ulonglongs(x) => x.encode(env),
+            Self::Longlongs(x) => x.encode(env),
+            Self::Floats(x) => x.encode(env),
+            Self::Doubles(x) => x.encode(env),
+            Self::Strs(x) => x.encode(env),
         };
         return result;
     }
 }
 
-impl From<attribute::AttrValue> for AttrValue {
-    fn from(value: attribute::AttrValue) -> AttrValue {
+impl From<AttrValue> for Value {
+    fn from(value: AttrValue) -> Value {
         match value {
-            attribute::AttrValue::Uchar(value) => Self::Uchar(value),
-            attribute::AttrValue::Schar(value) => Self::Schar(value),
-            attribute::AttrValue::Ushort(value) => Self::Ushort(value),
-            attribute::AttrValue::Short(value) => Self::Short(value),
-            attribute::AttrValue::Uint(value) => Self::Uint(value),
-            attribute::AttrValue::Int(value) => Self::Int(value),
-            attribute::AttrValue::Ulonglong(value) => Self::Ulonglong(value),
-            attribute::AttrValue::Longlong(value) => Self::Longlong(value),
-            attribute::AttrValue::Float(value) => Self::Float(value),
-            attribute::AttrValue::Double(value) => Self::Double(value),
-            attribute::AttrValue::Str(value) => Self::Str(value),
-            attribute::AttrValue::Uchars(value) => Self::Uchars(value),
-            attribute::AttrValue::Schars(value) => Self::Schars(value),
-            attribute::AttrValue::Ushorts(value) => Self::Ushorts(value),
-            attribute::AttrValue::Shorts(value) => Self::Shorts(value),
-            attribute::AttrValue::Uints(value) => Self::Uints(value),
-            attribute::AttrValue::Ints(value) => Self::Ints(value),
-            attribute::AttrValue::Ulonglongs(value) => Self::Ulonglongs(value),
-            attribute::AttrValue::Longlongs(value) => Self::Longlongs(value),
-            attribute::AttrValue::Floats(value) => Self::Floats(value),
-            attribute::AttrValue::Doubles(value) => Self::Doubles(value),
-            attribute::AttrValue::Strs(value) => Self::Strs(value),
+            AttrValue::Uchar(value) => Self::Uchar(value),
+            AttrValue::Schar(value) => Self::Schar(value),
+            AttrValue::Ushort(value) => Self::Ushort(value),
+            AttrValue::Short(value) => Self::Short(value),
+            AttrValue::Uint(value) => Self::Uint(value),
+            AttrValue::Int(value) => Self::Int(value),
+            AttrValue::Ulonglong(value) => Self::Ulonglong(value),
+            AttrValue::Longlong(value) => Self::Longlong(value),
+            AttrValue::Float(value) => Self::Float(value),
+            AttrValue::Double(value) => Self::Double(value),
+            AttrValue::Str(value) => Self::Str(value),
+            AttrValue::Uchars(value) => Self::Uchars(value),
+            AttrValue::Schars(value) => Self::Schars(value),
+            AttrValue::Ushorts(value) => Self::Ushorts(value),
+            AttrValue::Shorts(value) => Self::Shorts(value),
+            AttrValue::Uints(value) => Self::Uints(value),
+            AttrValue::Ints(value) => Self::Ints(value),
+            AttrValue::Ulonglongs(value) => Self::Ulonglongs(value),
+            AttrValue::Longlongs(value) => Self::Longlongs(value),
+            AttrValue::Floats(value) => Self::Floats(value),
+            AttrValue::Doubles(value) => Self::Doubles(value),
+            AttrValue::Strs(value) => Self::Strs(value),
         }
     }
 }

@@ -1,13 +1,13 @@
-use netcdf::attribute;
+use netcdf::attribute::Attribute;
 use rustler::{Env, Term};
 
 mod error;
 mod types;
 
 pub use error::NetCDFError;
-pub use types::AttrValue;
 pub use types::ExNetCDFFile;
 pub use types::ExNetCDFFileRef;
+pub use types::Value;
 
 rustler::atoms! {
     nil
@@ -19,7 +19,7 @@ fn on_load(env: Env, _info: Term) -> bool {
 }
 
 #[rustler::nif]
-fn open_file(filename: &std::primitive::str) -> Result<ExNetCDFFile, NetCDFError> {
+fn open_file(filename: &str) -> Result<ExNetCDFFile, NetCDFError> {
     let filepath = std::path::Path::new(filename);
     let file = match netcdf::open(filepath) {
         Ok(file) => file,
@@ -36,10 +36,7 @@ fn get_file_variables(ex_file: ExNetCDFFile) -> Result<Vec<String>, NetCDFError>
 }
 
 #[rustler::nif]
-fn load_variable(
-    ex_file: ExNetCDFFile,
-    variable_name: &std::primitive::str,
-) -> Result<Vec<f64>, NetCDFError> {
+fn load_variable(ex_file: ExNetCDFFile, variable_name: &str) -> Result<Vec<f64>, NetCDFError> {
     let file = &ex_file.resource.0;
     let variable = match file.variable(variable_name) {
         Some(var) => var,
@@ -55,8 +52,8 @@ fn load_variable(
 #[rustler::nif]
 fn get_variable_attributes(
     ex_file: ExNetCDFFile,
-    variable_name: &std::primitive::str,
-) -> Result<Vec<(String, AttrValue)>, NetCDFError> {
+    variable_name: &str,
+) -> Result<Vec<(String, Value)>, NetCDFError> {
     let file = &ex_file.resource.0;
     let variable = match file.variable(variable_name) {
         Some(var) => var,
@@ -71,11 +68,11 @@ fn get_variable_attributes(
     return Ok(result);
 }
 
-fn parse_variable_attribute(attr: attribute::Attribute) -> (String, AttrValue) {
+fn parse_variable_attribute(attr: Attribute) -> (String, Value) {
     let name = attr.name().to_string();
     let value = match attr.value() {
-        Err(_e) => AttrValue::Atom(nil()),
-        Ok(attr_value) => AttrValue::from(attr_value),
+        Err(_e) => Value::Atom(nil()),
+        Ok(attr_value) => Value::from(attr_value),
     };
 
     return (name, value);
