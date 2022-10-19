@@ -3,6 +3,7 @@ defmodule NetCDF.Native do
 
   # netcdf::file
   def file_open(_filename), do: :erlang.nif_error(:nif_not_loaded)
+  def file_close(_filename), do: :erlang.nif_error(:nif_not_loaded)
   def file_open_with_variables(_filename), do: :erlang.nif_error(:nif_not_loaded)
   def file_variables(_file_handle), do: :erlang.nif_error(:nif_not_loaded)
 

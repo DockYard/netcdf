@@ -12,6 +12,7 @@ use types::variable::NetCDFVariable;
 
 rustler::atoms! {
     nil,
+    ok,
     non_numeric,
     i8_t = "i8",
     i16_t = "i16",
@@ -59,11 +60,9 @@ fn variable_values(
 ) -> Result<(Value, rustler::types::atom::Atom), NetCDFError> {
     let file = &ex_file.resource.0;
 
-    let variable = file
-        .variable(variable_name)
-        .ok_or(NetCDFError::NotFound())?;
-
-    return get_variable_values(&variable);
+    file.variable(variable_name)
+        .ok_or(NetCDFError::NotFound())
+        .and_then(|var| get_variable_values(&var))
 }
 
 fn get_variable_values(
@@ -154,7 +153,9 @@ fn get_variable_attributes(variable: &netcdf::variable::Variable) -> Vec<(String
 #[rustler::nif]
 fn variable_load(ex_file: NetCDFFile, variable_name: &str) -> Result<NetCDFVariable, NetCDFError> {
     let file = &ex_file.resource.0;
-    let variable = file.variable(variable_name).ok_or(NetCDFError::NotFound())?;
+    let variable = file
+        .variable(variable_name)
+        .ok_or(NetCDFError::NotFound())?;
     let (values, value_type) = get_variable_values(&variable)?;
     let attributes = get_variable_attributes(&variable);
 
