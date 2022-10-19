@@ -3,6 +3,7 @@ defmodule NetCDF.File do
   Represents a NetCDF File
   """
   defstruct [:resource, :filename, :variables]
+  @type t :: %__MODULE__{resource: reference(), filename: String.t(), variables: [String.t()]}
 
   @doc """
   Returns a `__MODULE__` struct with all its fields
