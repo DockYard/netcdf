@@ -1,4 +1,4 @@
-defmodule DataParser.NetCDF.Variable do
+defmodule NetCDF.Variable do
   @moduledoc """
   Variable access functions
   """
@@ -17,10 +17,10 @@ defmodule DataParser.NetCDF.Variable do
   @doc """
   Returns a `__MODULE__` struct with the variable's values and associated metadata.
   """
-  @spec load(file :: DataParser.NetCDF.File.t(), variable_name :: String.t()) ::
+  @spec load(file :: NetCDF.File.t(), variable_name :: String.t()) ::
           {:ok, t()} | {:error, any()}
   def load(file, variable_name) do
-    case DataParser.NetCDF.Native.variable_load(file, variable_name) do
+    case NetCDF.Native.variable_load(file, variable_name) do
       {:ok, s} ->
         attr_map = Map.new(s.attributes)
         {:ok, %{s | attributes: attr_map}}

@@ -3,7 +3,7 @@ defmodule DataParser.MixProject do
 
   def project do
     [
-      app: :data_parser,
+      app: :netcdf,
       version: "0.1.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
@@ -21,8 +21,7 @@ defmodule DataParser.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:rustler, "~> 0.26.0"},
-      {:nx, "~> 0.3"}
+      {:rustler, "~> 0.26.0"}
     ]
   end
 end

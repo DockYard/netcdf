@@ -1,5 +1,5 @@
-defmodule DataParser.NetCDF.Native do
-  use Rustler, otp_app: :data_parser, crate: "dataparser_netcdf"
+defmodule NetCDF.Native do
+  use Rustler, otp_app: :netcdf, crate: "ex_netcdf"
 
   # netcdf::file
   def file_open(_filename), do: :erlang.nif_error(:nif_not_loaded)

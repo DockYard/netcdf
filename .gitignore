@@ -60,7 +60,7 @@ erl_crash.dump
 .elixir_ls/
 
 /priv
-/priv/native/libdataparser_netcdf
+/priv/native/libex_netcdf
 
 ### Elixir Patch ###
 

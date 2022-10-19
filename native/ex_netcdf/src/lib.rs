@@ -199,7 +199,7 @@ fn parse_variable_attribute(attr: Attribute) -> (String, Value) {
 }
 
 rustler::init!(
-    "Elixir.DataParser.NetCDF.Native",
+    "Elixir.NetCDF.Native",
     [
         file_open,
         file_variables,

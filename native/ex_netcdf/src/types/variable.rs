@@ -4,7 +4,7 @@ use rustler::NifStruct;
 use crate::types::value::Value;
 
 #[derive(NifStruct)]
-#[module = "DataParser.NetCDF.Variable"]
+#[module = "NetCDF.Variable"]
 pub struct NetCDFVariable {
     pub name: String,
     pub value: Value,

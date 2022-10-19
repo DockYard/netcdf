@@ -1,11 +1,11 @@
 [package]
-name = "dataparser_netcdf"
+name = "ex_netcdf"
 version = "0.1.0"
 authors = []
 edition = "2018"
 
 [lib]
-name = "dataparser_netcdf"
+name = "ex_netcdf"
 path = "src/lib.rs"
 crate-type = ["cdylib"]
 

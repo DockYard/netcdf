@@ -4,7 +4,7 @@ use rustler::{NifStruct, ResourceArc};
 pub struct NetCDFFileRef(pub File);
 
 #[derive(NifStruct)]
-#[module = "DataParser.NetCDF.File"]
+#[module = "NetCDF.File"]
 pub struct NetCDFFile {
     pub resource: ResourceArc<NetCDFFileRef>,
     pub filename: String,

@@ -1,21 +1,21 @@
-# DataParser
+# NetCDF
 
-**TODO: Add description**
+Elixir NIF Bindings for the Rust NetCDF library
 
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `data_parser` to your list of dependencies in `mix.exs`:
+by adding `netcdf` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:data_parser, "~> 0.1.0"}
+    {:netcdf, "~> 0.1.0"}
   ]
 end
 ```
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/data_parser>.
+be found at <https://hexdocs.pm/netcdf>.
 
