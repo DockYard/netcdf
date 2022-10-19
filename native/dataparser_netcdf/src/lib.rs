@@ -5,11 +5,11 @@ use rustler::{Env, Term};
 mod error;
 mod types;
 
-pub use error::NetCDFError;
-pub use types::ExNetCDFFile;
-pub use types::ExNetCDFFileRef;
-pub use types::ExNetCDFVariable;
-pub use types::Value;
+use error::NetCDFError;
+use types::file::{NetCDFFile, NetCDFFileRef};
+use types::variable::NetCDFVariable;
+use types::value::Value;
+
 
 rustler::atoms! {
     nil,
@@ -27,41 +27,41 @@ rustler::atoms! {
 }
 
 fn on_load(env: Env, _info: Term) -> bool {
-    rustler::resource!(ExNetCDFFileRef, env);
+    rustler::resource!(NetCDFFileRef, env);
     true
 }
 
 #[rustler::nif]
-fn file_open(filename: &str) -> Result<ExNetCDFFile, NetCDFError> {
+fn file_open(filename: &str) -> Result<NetCDFFile, NetCDFError> {
     let filepath = std::path::Path::new(filename);
     let file = match netcdf::open(filepath) {
         Ok(file) => file,
         Err(e) => return Err(NetCDFError::NetCDF(e)),
     };
-    return Ok(ExNetCDFFile::new(file, filename, Vec::<String>::new()));
+    return Ok(NetCDFFile::new(file, filename, Vec::<String>::new()));
 }
 
 #[rustler::nif]
-fn file_variables(ex_file: ExNetCDFFile) -> Result<Vec<String>, NetCDFError> {
+fn file_variables(ex_file: NetCDFFile) -> Result<Vec<String>, NetCDFError> {
     let file = &ex_file.resource.0;
     let result = file.variables().map(|var| var.name()).collect();
     return Ok(result);
 }
 
 #[rustler::nif]
-fn file_open_with_variables(filename: &str) -> Result<ExNetCDFFile, NetCDFError> {
+fn file_open_with_variables(filename: &str) -> Result<NetCDFFile, NetCDFError> {
     let filepath = std::path::Path::new(filename);
     let file = match netcdf::open(filepath) {
         Ok(file) => file,
         Err(e) => return Err(NetCDFError::NetCDF(e)),
     };
     let variables = file.variables().map(|var| var.name()).collect();
-    return Ok(ExNetCDFFile::new(file, filename, variables));
+    return Ok(NetCDFFile::new(file, filename, variables));
 }
 
 #[rustler::nif]
 fn variable_values(
-    ex_file: ExNetCDFFile,
+    ex_file: NetCDFFile,
     variable_name: &str,
 ) -> Result<(Value, rustler::types::atom::Atom), NetCDFError> {
     let file = &ex_file.resource.0;
@@ -143,7 +143,7 @@ fn as_type_atom(type_name: &str) -> rustler::types::atom::Atom {
 
 #[rustler::nif]
 fn variable_attributes(
-    ex_file: ExNetCDFFile,
+    ex_file: NetCDFFile,
     variable_name: &str,
 ) -> Result<Vec<(String, Value)>, NetCDFError> {
     let file = &ex_file.resource.0;
@@ -164,9 +164,9 @@ fn get_variable_attributes(variable: &netcdf::variable::Variable) -> Vec<(String
 
 #[rustler::nif]
 fn variable_load(
-    ex_file: ExNetCDFFile,
+    ex_file: NetCDFFile,
     variable_name: &str,
-) -> Result<ExNetCDFVariable, NetCDFError> {
+) -> Result<NetCDFVariable, NetCDFError> {
     let file = &ex_file.resource.0;
     let variable = match file.variable(variable_name) {
         Some(var) => var,
@@ -180,7 +180,7 @@ fn variable_load(
 
     let attributes = get_variable_attributes(&variable);
 
-    return Ok(ExNetCDFVariable::new(
+    return Ok(NetCDFVariable::new(
         variable_name.to_string(),
         values.0,
         values.1,

@@ -11,7 +11,7 @@ defmodule DataParser.NetCDF.Variable do
   @type t :: %__MODULE__{
           name: String.t(),
           type: variable_type(),
-          attributes: [{String.t(), attribute_value()}]
+          attributes: %{optional(String.t()) => attribute_value}
         }
 
   @doc """
@@ -19,5 +19,14 @@ defmodule DataParser.NetCDF.Variable do
   """
   @spec load(file :: DataParser.NetCDF.File.t(), variable_name :: String.t()) ::
           {:ok, t()} | {:error, any()}
-  defdelegate load(file, variable_name), to: DataParser.NetCDF.Native, as: :variable_load
+  def load(file, variable_name) do
+    case DataParser.NetCDF.Native.variable_load(file, variable_name) do
+      {:ok, s} ->
+        attr_map = Map.new(s.attributes)
+        {:ok, %{s | attributes: attr_map}}
+
+      error ->
+        error
+    end
+  end
 end

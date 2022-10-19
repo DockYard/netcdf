@@ -61,6 +61,8 @@ erl_crash.dump
 /config/*.secret.exs
 .elixir_ls/
 
+/priv/native/libdataparser_netcdf
+
 ### Elixir Patch ###
 
 # End of https://www.toptal.com/developers/gitignore/api/elixir
