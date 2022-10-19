@@ -1,3 +1,11 @@
 defmodule DataParser.NetCDF.File do
-  defstruct [:resource, :filename]
+  @moduledoc """
+  Represents a NetCDF File
+  """
+  defstruct [:resource, :filename, :variables]
+
+  @doc """
+  Returns a `__MODULE__` struct with all its fields
+  """
+  defdelegate open(filename), to: DataParser.NetCDF.Native, as: :file_open_with_variables
 end

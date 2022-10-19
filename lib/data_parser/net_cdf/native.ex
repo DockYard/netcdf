@@ -1,0 +1,15 @@
+defmodule DataParser.NetCDF.Native do
+  use Rustler, otp_app: :data_parser, crate: "dataparser_netcdf"
+
+  # netcdf::file
+  def file_open(_filename), do: :erlang.nif_error(:nif_not_loaded)
+  def file_open_with_variables(_filename), do: :erlang.nif_error(:nif_not_loaded)
+  def file_variables(_file_handle), do: :erlang.nif_error(:nif_not_loaded)
+
+  # netcdf::variable
+  def variable_load(_file_handle, _variable_name), do: :erlang.nif_error(:nif_not_loaded)
+  def variable_values(_file_handle, _variable_name), do: :erlang.nif_error(:nif_not_loaded)
+
+  def variable_attributes(_file_handle, _variable_name),
+    do: :erlang.nif_error(:nif_not_loaded)
+end

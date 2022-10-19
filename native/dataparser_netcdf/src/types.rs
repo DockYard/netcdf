@@ -9,10 +9,36 @@ rustler::atoms! {
 }
 
 #[derive(NifStruct)]
+#[module = "DataParser.NetCDF.Variable"]
+pub struct ExNetCDFVariable {
+    pub name: String,
+    pub value: Value,
+    pub r#type: rustler::types::atom::Atom,
+    pub attributes: Vec<(String, Value)>,
+}
+
+impl ExNetCDFVariable {
+    pub fn new(
+        name: String,
+        value: Value,
+        t: rustler::types::atom::Atom,
+        attr: Vec<(String, Value)>,
+    ) -> Self {
+        Self {
+            name: name,
+            value: value,
+            r#type: t,
+            attributes: attr,
+        }
+    }
+}
+
+#[derive(NifStruct)]
 #[module = "DataParser.NetCDF.File"]
 pub struct ExNetCDFFile {
     pub resource: ResourceArc<ExNetCDFFileRef>,
     pub filename: String,
+    pub variables: Vec<String>,
 }
 
 impl ExNetCDFFileRef {
@@ -22,10 +48,11 @@ impl ExNetCDFFileRef {
 }
 
 impl ExNetCDFFile {
-    pub fn new(file: File, filename: &str) -> Self {
+    pub fn new(file: File, filename: &str, variables: Vec<String>) -> Self {
         Self {
             resource: ResourceArc::new(ExNetCDFFileRef::new(file)),
             filename: filename.to_string(),
+            variables: variables,
         }
     }
 }
@@ -54,6 +81,12 @@ pub enum Value {
     Floats(Vec<f32>),
     Doubles(Vec<f64>),
     Strs(Vec<String>),
+}
+
+impl<'a> rustler::Decoder<'a> for Value {
+    fn decode(_term: Term<'a>) -> rustler::NifResult<Self> {
+        Err(rustler::Error::RaiseAtom("unable to decode"))
+    }
 }
 
 impl rustler::Encoder for Value {
@@ -113,5 +146,71 @@ impl From<AttrValue> for Value {
             AttrValue::Doubles(value) => Self::Doubles(value),
             AttrValue::Strs(value) => Self::Strs(value),
         }
+    }
+}
+
+impl From<Vec<u8>> for Value {
+    fn from(value: Vec<u8>) -> Value {
+        Self::Uchars(value)
+    }
+}
+
+impl From<Vec<i8>> for Value {
+    fn from(value: Vec<i8>) -> Value {
+        Self::Schars(value)
+    }
+}
+
+impl From<Vec<u16>> for Value {
+    fn from(value: Vec<u16>) -> Value {
+        Self::Ushorts(value)
+    }
+}
+
+impl From<Vec<i16>> for Value {
+    fn from(value: Vec<i16>) -> Value {
+        Self::Shorts(value)
+    }
+}
+
+impl From<Vec<u32>> for Value {
+    fn from(value: Vec<u32>) -> Value {
+        Self::Uints(value)
+    }
+}
+
+impl From<Vec<i32>> for Value {
+    fn from(value: Vec<i32>) -> Value {
+        Self::Ints(value)
+    }
+}
+
+impl From<Vec<u64>> for Value {
+    fn from(value: Vec<u64>) -> Value {
+        Self::Ulonglongs(value)
+    }
+}
+
+impl From<Vec<i64>> for Value {
+    fn from(value: Vec<i64>) -> Value {
+        Self::Longlongs(value)
+    }
+}
+
+impl From<Vec<f32>> for Value {
+    fn from(value: Vec<f32>) -> Value {
+        Self::Floats(value)
+    }
+}
+
+impl From<Vec<f64>> for Value {
+    fn from(value: Vec<f64>) -> Value {
+        Self::Doubles(value)
+    }
+}
+
+impl From<Vec<String>> for Value {
+    fn from(value: Vec<String>) -> Value {
+        Self::Strs(value)
     }
 }
