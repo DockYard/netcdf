@@ -35,14 +35,14 @@ fn on_load(env: Env, _info: Term) -> bool {
 fn file_open(filename: &str) -> Result<NetCDFFile, NetCDFError> {
     let filepath = std::path::Path::new(filename);
     let file = netcdf::open(filepath)?;
-    return Ok(NetCDFFile::new(file, filename, Vec::<String>::new()));
+    Ok(NetCDFFile::new(file, filename, Vec::<String>::new()))
 }
 
 #[rustler::nif]
 fn file_variables(ex_file: NetCDFFile) -> Result<Vec<String>, NetCDFError> {
     let file = &ex_file.resource.0;
     let result = file.variables().map(|var| var.name()).collect();
-    return Ok(result);
+    Ok(result)
 }
 
 #[rustler::nif]
@@ -50,7 +50,7 @@ fn file_open_with_variables(filename: &str) -> Result<NetCDFFile, NetCDFError> {
     let filepath = std::path::Path::new(filename);
     let file = netcdf::open(filepath)?;
     let variables = file.variables().map(|var| var.name()).collect();
-    return Ok(NetCDFFile::new(file, filename, variables));
+    Ok(NetCDFFile::new(file, filename, variables))
 }
 
 #[rustler::nif]
@@ -144,10 +144,10 @@ fn variable_attributes(
 }
 
 fn get_variable_attributes(variable: &netcdf::variable::Variable) -> Vec<(String, Value)> {
-    return variable
+    variable
         .attributes()
         .map(parse_variable_attribute)
-        .collect();
+        .collect()
 }
 
 #[rustler::nif]
@@ -159,12 +159,12 @@ fn variable_load(ex_file: NetCDFFile, variable_name: &str) -> Result<NetCDFVaria
     let (values, value_type) = get_variable_values(&variable)?;
     let attributes = get_variable_attributes(&variable);
 
-    return Ok(NetCDFVariable::new(
+    Ok(NetCDFVariable::new(
         variable_name.to_string(),
         values,
         value_type,
         attributes,
-    ));
+    ))
 }
 
 fn parse_variable_attribute(attr: Attribute) -> (String, Value) {
@@ -174,7 +174,7 @@ fn parse_variable_attribute(attr: Attribute) -> (String, Value) {
         Ok(attr_value) => Value::from(attr_value),
     };
 
-    return (name, value);
+    (name, value);
 }
 
 rustler::init!(
