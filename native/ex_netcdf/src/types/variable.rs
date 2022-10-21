@@ -13,12 +13,12 @@ pub struct NetCDFVariable {
 }
 
 impl NetCDFVariable {
-    pub fn new(name: String, value: Value, t: Atom, attr: Vec<(String, Value)>) -> Self {
+    pub fn new(name: String, value: Value, r#type: Atom, attributes: Vec<(String, Value)>) -> Self {
         Self {
-            name: name,
-            value: value,
-            r#type: t,
-            attributes: attr,
+            name,
+            value,
+            r#type,
+            attributes,
         }
     }
 }
