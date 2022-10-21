@@ -174,7 +174,7 @@ fn parse_variable_attribute(attr: Attribute) -> (String, Value) {
         Ok(attr_value) => Value::from(attr_value),
     };
 
-    (name, value);
+    (name, value)
 }
 
 rustler::init!(
