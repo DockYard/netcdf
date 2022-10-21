@@ -47,7 +47,7 @@ jobs:
         with:
           otp-version: ${{ matrix.otp_version }}
           elixir-version: ${{ matrix.elixir_version }}
-      - run: sudo apt install -y libhdf5-serial-dev
+      - run: sudo apt install -y libhdf5-serial-dev libnetcdf-dev
       - run: mix deps.get
       - run: mix deps.compile
       - name: Run tests
