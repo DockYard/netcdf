@@ -10,7 +10,7 @@ by adding `netcdf` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:netcdf, "~> 0.1.0"}
+    {:netcdf, "~> 0.0.1"}
   ]
 end
 ```
