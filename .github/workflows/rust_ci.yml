@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
         manifest:
-          - native/explorer/Cargo.toml
+          - native/ex_netcdf/Cargo.toml
 
     steps:
       - uses: actions/checkout@v2
@@ -33,7 +33,7 @@ jobs:
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
-            native/explorer/target/
+            native/ex_netcdf/target/
             priv/native/
           key: ${{ runner.os }}-cargo-${{ env.RUST_TOOLCHAIN_VERSION }}-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
