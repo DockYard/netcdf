@@ -1,43 +1,65 @@
-name: Test
+name: Elixir CI
 on:
   push:
     branches:
       - main
   pull_request:
+  workflow_dispatch:
+
+env:
+  EXPLORER_BUILD: true
+  RUST_TOOLCHAIN_VERSION: nightly-2022-08-16
+  MIX_ENV: test
+
 jobs:
-  main:
-    name: Linux
-    runs-on: ubuntu-latest
+  test:
     strategy:
-      fail-fast: false
       matrix:
-        elixir: ["1.13.0", "1.14.0"]
-        otp: ["24.0", "25.0"]
-    defaults:
-      run:
-        working-directory: ${{ matrix.working_directory }}
-    env:
-      MIX_ENV: test
+        otp_version: [24.2, 25.0]
+        elixir_version: [1.13, 1.14]
+    runs-on: ubuntu-latest
+    name: test
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-mix-${{ matrix.elixir_version }}-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            native/explorer/target/
+            priv/native/
+          key: ${{ runner.os }}-cargo-${{ env.RUST_TOOLCHAIN_VERSION }}-${{ hashFiles('**/Cargo.lock') }}
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: "${{ env.RUST_TOOLCHAIN_VERSION }}"
+          override: true
       - uses: erlef/setup-beam@v1
         with:
-          otp-version: ${{ matrix.otp }}
-          elixir-version: ${{ matrix.elixir }}
-      - name: Retrieve dependencies cache
-        env:
-          cache-name: cache-mix-deps
-        uses: actions/cache@v3
-        id: mix-cache # id to use in retrieve action
-        with:
-          path: ${{ github.workspace }}/${{ matrix.working_directory }}/deps
-          key: ${{ runner.os }}-Elixir-v${{ matrix.elixir }}-OTP-${{ matrix.otp }}-${{ hashFiles(format('{0}/{1}/mix.lock', github.workspace, matrix.working_directory)) }}
-      - name: Install dependencies
-        if: ${{ steps.mix-cache.outputs.cache-hit != 'true' }}
-        run: mix deps.get
-      - name: Compile and check warnings
-        run: mix compile --warnings-as-errors
-      - name: Check formatting
-        run: mix format --check-formatted
+          otp-version: ${{ matrix.otp_version }}
+          elixir-version: ${{ matrix.elixir_version }}
+      - run: mix deps.get
+      - run: mix deps.compile
       - name: Run tests
-        run: mix test
+        run: mix test --warnings-as-errors
+      - name: Compile once again but without optional deps
+        run: mix compile --force --warnings-as-errors --skip-optional-deps
+  format:
+    runs-on: ubuntu-latest
+    name: mix format
+    steps:
+      - uses: actions/checkout@v2
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: 25.0
+          elixir-version: 1.14
+      - run: mix format --check-formatted
