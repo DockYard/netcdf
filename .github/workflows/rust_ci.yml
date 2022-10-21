@@ -49,6 +49,7 @@ jobs:
         with:
           command: fmt
           args: --manifest-path=${{ matrix.manifest }} --all -- --check
+      - run: sudo apt install -y libhdf5-serial-dev libnetcdf-dev
       - name: run clippy
         uses: actions-rs/cargo@v1
         with:
