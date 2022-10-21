@@ -38,12 +38,14 @@ defmodule NetCDF.VariableTest do
     end
 
     test "errors on invalid file" do
-      assert_raise ErlangError, "Erlang error: \"Could not decode field :resource on %NetCDFFile{}\"", fn ->
-        Variable.load(
-          %File{filename: "name", variables: ["var"], resource: make_ref()},
-          "lat"
-        )
-      end
+      assert_raise ErlangError,
+                   "Erlang error: \"Could not decode field :resource on %NetCDFFile{}\"",
+                   fn ->
+                     Variable.load(
+                       %File{filename: "name", variables: ["var"], resource: make_ref()},
+                       "lat"
+                     )
+                   end
     end
   end
 end
