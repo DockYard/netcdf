@@ -22,7 +22,7 @@ impl NetCDFFile {
         Self {
             resource: ResourceArc::new(NetCDFFileRef::new(file)),
             filename: filename.to_string(),
-            variables: variables,
+            variables,
         }
     }
 }

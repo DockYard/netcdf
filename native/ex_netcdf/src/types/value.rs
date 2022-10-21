@@ -61,7 +61,8 @@ impl rustler::Encoder for Value {
             Self::Doubles(x) => x.encode(env),
             Self::Strs(x) => x.encode(env),
         };
-        return result;
+
+        result
     }
 }
 

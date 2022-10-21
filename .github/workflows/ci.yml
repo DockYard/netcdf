@@ -1,0 +1,64 @@
+name: Elixir CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+env:
+  EXPLORER_BUILD: true
+  RUST_TOOLCHAIN_VERSION: nightly-2022-08-16
+  MIX_ENV: test
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        otp_version: [24.2, 25.0]
+        elixir_version: [1.13, 1.14]
+    runs-on: ubuntu-latest
+    name: test
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-mix-${{ matrix.elixir_version }}-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            native/explorer/target/
+            priv/native/
+          key: ${{ runner.os }}-cargo-${{ env.RUST_TOOLCHAIN_VERSION }}-${{ hashFiles('**/Cargo.lock') }}
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: "${{ env.RUST_TOOLCHAIN_VERSION }}"
+          override: true
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: ${{ matrix.otp_version }}
+          elixir-version: ${{ matrix.elixir_version }}
+      - run: sudo apt install -y libhdf5-serial-dev libnetcdf-dev
+      - run: mix deps.get
+      - run: mix deps.compile
+      - name: Run tests
+        run: mix test --warnings-as-errors
+  format:
+    runs-on: ubuntu-latest
+    name: mix format
+    steps:
+      - uses: actions/checkout@v2
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: 25.0
+          elixir-version: 1.14
+      - run: mix format --check-formatted
