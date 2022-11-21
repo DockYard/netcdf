@@ -8,8 +8,6 @@ on:
     paths:
       - "native/**"
   pull_request:
-    paths:
-      - "native/**"
   workflow_dispatch:
 
 env:
