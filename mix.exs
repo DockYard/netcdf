@@ -1,13 +1,23 @@
 defmodule DataParser.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/DockYard/netcdf"
+  @version "0.1.0"
+
   def project do
     [
       app: :netcdf,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      docs: docs(),
+      name: "NetCDF",
+      package: package(),
+      preferred_cli_env: [
+        docs: :docs,
+        "hex.publish": :docs
+      ]
     ]
   end
 
@@ -21,7 +31,23 @@ defmodule DataParser.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:rustler, "~> 0.26.0"}
+      {:rustler, "~> 0.26.0"},
+      {:ex_doc, "~> 0.29.0", only: :docs}
+    ]
+  end
+
+  defp package do
+    [
+      maintainers: ["Paulo Valente"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => @source_url}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      extras: ["README.md"]
     ]
   end
 end

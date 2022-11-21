@@ -38,9 +38,28 @@ as well as reading their contents for header and format exploration.
 
 On Ubuntu, you can install it using: `apt install nco`
 On macOS, you can install it using: `brew install nco`
+
+## Usage
+
+A NetCDF file can be loaded into Elixir with the following command:
+
+```elixir
+filename = # Elixir string with the path to the NetCDF file
+{:ok, file} = NetCDF.File.open(filename)
+```
+
+We can inspect its variables in the struct's `:variables` field.
+Finally, variables can be loaded as follows:
+
+```elixir
+# loading the first variable from the file
+variable_name = hd(file.variables)
+{:ok, variable} = NetCDF.Variable.load(file, variable_name)
+```
+
 ## Authors ##
 
-* [Paulo Valente](https://github.com/polvalente)
+- [Paulo Valente](https://github.com/polvalente)
 
 [We are very thankful for the many contributors](https://github.com/dockyard/netcdf/graphs/contributors)
 
