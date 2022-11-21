@@ -1,4 +1,5 @@
 defmodule NetCDF.Native do
+  @moduledoc false
   use Rustler, otp_app: :netcdf, crate: "ex_netcdf"
 
   # netcdf::file

@@ -47,7 +47,8 @@ defmodule DataParser.MixProject do
   defp docs do
     [
       main: "readme",
-      extras: ["README.md"]
+      extras: ["README.md"],
+      source_url_pattern: "#{@source_url}/blob/v#{@version}/%{path}#L%{line}"
     ]
   end
 end
