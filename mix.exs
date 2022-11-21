@@ -13,6 +13,7 @@ defmodule DataParser.MixProject do
       deps: deps(),
       docs: docs(),
       name: "NetCDF",
+      description: "NetCDF file format NIF bindings and utilities for Elixir",
       package: package(),
       preferred_cli_env: [
         docs: :docs,
