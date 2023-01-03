@@ -2,7 +2,7 @@ defmodule DataParser.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/DockYard/netcdf"
-  @version "0.1.0"
+  @version "0.1.1"
 
   def project do
     [
@@ -41,7 +41,16 @@ defmodule DataParser.MixProject do
     [
       maintainers: ["Paulo Valente"],
       licenses: ["MIT"],
-      links: %{"GitHub" => @source_url}
+      links: %{"GitHub" => @source_url},
+      files: [
+        "lib",
+        "native",
+        "mix.exs",
+        "LICENSE"
+      ],
+      exclude_patterns: [
+        ~r"native(/[^/]+)*/target"
+      ]
     ]
   end
 
