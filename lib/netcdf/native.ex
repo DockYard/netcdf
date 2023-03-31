@@ -14,6 +14,14 @@ defmodule NetCDF.Native do
     base_url: "#{github_url}/releases/download/v#{version}",
     version: version,
     force_build: force_build,
+    targets: [
+      "arm-unknown-linux-gnueabihf",
+      "aarch64-unknown-linux-gnu",
+      "aarch64-apple-darwin",
+      "x86_64-apple-darwin",
+      "x86_64-unknown-linux-gnu",
+      "x86_64-unknown-linux-musl"
+    ]
     mode: mode
 
   # netcdf::file
