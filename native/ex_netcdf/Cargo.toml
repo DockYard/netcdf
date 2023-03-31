@@ -2,7 +2,7 @@
 name = "ex_netcdf"
 version = "0.1.0"
 authors = []
-edition = "2018"
+edition = "2023"
 
 [lib]
 name = "ex_netcdf"

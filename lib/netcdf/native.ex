@@ -1,6 +1,11 @@
 defmodule NetCDF.Native do
   @moduledoc false
-  use Rustler, otp_app: :netcdf, crate: "ex_netcdf"
+  use RustlerPrecompiled,
+    otp_app: :netcdf,
+    crate: "ex_netcdf",
+    base_url: Application.compile_env!(:netcdf, :base_url),
+    version: Application.compile_env!(:netcdf, :version)
+
 
   # netcdf::file
   def file_open(_filename), do: :erlang.nif_error(:nif_not_loaded)

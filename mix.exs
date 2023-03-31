@@ -1,8 +1,11 @@
-defmodule DataParser.MixProject do
+defmodule NetCDF.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/DockYard/netcdf"
-  @version "0.1.1"
+  @version "0.2"
+
+  Application.put_env(:netcdf, :base_url, "#{@source_url}/releases/download/#{@version}")
+  Application.put_env(:netcdf, :version, @version)
 
   def project do
     [
@@ -32,7 +35,8 @@ defmodule DataParser.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:rustler, "~> 0.26.0"},
+      {:rustler, ">= 0.0.0", optional: true},
+      {:rustler_precompiled, "~> 0.6.1"},
       {:ex_doc, "~> 0.29.0", only: :docs}
     ]
   end
