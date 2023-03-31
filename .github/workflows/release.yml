@@ -37,8 +37,6 @@ jobs:
               os: ubuntu-20.04,
               use-cross: true,
             }
-          - { target: x86_64-pc-windows-gnu, os: windows-2019 }
-          - { target: x86_64-pc-windows-msvc, os: windows-2019 }
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -52,6 +50,12 @@ jobs:
         with:
           toolchain: stable
           target: ${{ matrix.job.target }}
+      - name: Install dependencies
+        if: ${{ matrix.job.os == ubuntu-20.04}}
+        run: sudo apt install -y libhdf5-serial-dev libnetcdf-dev
+      - name: Install dependencies
+        if: ${{ matrix.job.os == macos-11}}
+        run: brew install netcdf-cxx@4.3.1
       - name: Build the project
         id: build-crate
         uses: philss/rustler-precompiled-action@v1.0.0
