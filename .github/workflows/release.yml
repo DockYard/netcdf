@@ -49,10 +49,10 @@ jobs:
           toolchain: stable
           target: ${{ matrix.job.target }}
       - name: Install dependencies (Linux x86)
-        if: ${{ matrix.job.os == 'ubuntu-20.04' and !matrix.job.manual-hdf5 }}
+        if: ${{ matrix.job.os == 'ubuntu-20.04' && !matrix.job.manual-hdf5 }}
         run: sudo apt install -y libhdf5-serial-dev libnetcdf-dev
       - name: Install dependencies (Linux aarch64)
-        if: ${{ matrix.job.os == 'ubuntu-20.04' and matrix.job.manual-hdf5 }}
+        if: ${{ matrix.job.os == 'ubuntu-20.04' && matrix.job.manual-hdf5 }}
         run: |
           sudo apt install -y libnetcdf-dev
           wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.9/src/hdf5-1.10.9.tar.gz
