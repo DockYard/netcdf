@@ -2,6 +2,9 @@ name: Elixir CI
 on:
   release:
     types: [published]
+  push:
+    branches:
+      - main
 
 env:
   RUST_TOOLCHAIN_VERSION: nightly-2022-08-16
@@ -55,7 +58,7 @@ jobs:
         run: sudo apt install -y libhdf5-serial-dev libnetcdf-dev
       - name: Install dependencies
         if: ${{ matrix.job.os == 'macos-11'}}
-        run: brew install netcdf-cxx@4.3.1
+        run: brew install netcdf-cxx
       - name: Build the project
         id: build-crate
         uses: philss/rustler-precompiled-action@v1.0.0
