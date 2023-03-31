@@ -51,10 +51,10 @@ jobs:
           toolchain: stable
           target: ${{ matrix.job.target }}
       - name: Install dependencies
-        if: ${{ matrix.job.os == "ubuntu-20.04"}}
+        if: ${{ matrix.job.os == 'ubuntu-20.04'}}
         run: sudo apt install -y libhdf5-serial-dev libnetcdf-dev
       - name: Install dependencies
-        if: ${{ matrix.job.os == "macos-11"}}
+        if: ${{ matrix.job.os == 'macos-11'}}
         run: brew install netcdf-cxx@4.3.1
       - name: Build the project
         id: build-crate
