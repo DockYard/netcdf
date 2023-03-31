@@ -24,13 +24,13 @@ jobs:
               target: arm-unknown-linux-gnueabihf,
               os: ubuntu-20.04,
               use-cross: true,
-              manual-hdf5: true
+              manual-hdf5: true,
             }
           - {
               target: aarch64-unknown-linux-gnu,
               os: ubuntu-20.04,
               use-cross: true,
-              manual-hdf5: true
+              manual-hdf5: true,
             }
           - { target: aarch64-apple-darwin, os: macos-11 }
           - { target: x86_64-apple-darwin, os: macos-11 }
@@ -78,7 +78,23 @@ jobs:
           echo "H5_NO_ALIGNMENT_RESTRICTIONS_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
       - name: Install dependencies (macOS)
         if: ${{ matrix.job.os == 'macos-11'}}
-        run: brew install netcdf-cxx
+        run: |
+          brew install netcdf-cxx
+          echo "HDF5_DIR=/usr/local/lib/hdf5" >> $GITHUB_ENV
+          echo "H5_PRINTF_LL_TEST_RUN=false" >> $GITHUB_ENV
+          echo "H5_PRINTF_LL_TEST_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
+          echo "H5_LDOUBLE_TO_LONG_SPECIAL_RUN=false" >> $GITHUB_ENV
+          echo "H5_LDOUBLE_TO_LONG_SPECIAL_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
+          echo "H5_LONG_TO_LDOUBLE_SPECIAL_RUN=false" >> $GITHUB_ENV
+          echo "H5_LONG_TO_LDOUBLE_SPECIAL_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
+          echo "H5_LDOUBLE_TO_LLONG_ACCURATE_RUN=false" >> $GITHUB_ENV
+          echo "H5_LDOUBLE_TO_LLONG_ACCURATE_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
+          echo "H5_LLONG_TO_LDOUBLE_CORRECT_RUN=false" >> $GITHUB_ENV
+          echo "H5_LLONG_TO_LDOUBLE_CORRECT_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
+          echo "H5_DISABLE_SOME_LDOUBLE_CONV_RUN=false" >> $GITHUB_ENV
+          echo "H5_DISABLE_SOME_LDOUBLE_CONV_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
+          echo "H5_NO_ALIGNMENT_RESTRICTIONS_RUN=false" >> $GITHUB_ENV
+          echo "H5_NO_ALIGNMENT_RESTRICTIONS_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
       - name: Build the project
         id: build-crate
         uses: philss/rustler-precompiled-action@v1.0.0
