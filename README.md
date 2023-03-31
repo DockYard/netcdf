@@ -11,12 +11,18 @@ by adding `netcdf` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:netcdf, "~> 0.1.0"}
+    {:netcdf, "~> 0.2.0"}
   ]
 end
 ```
 
 ### Dependencies
+
+For usage, you don't need any dependencies installed.
+The library uses `:rustler_precompiled` to fetch compiled versions.
+
+If you want to compile locally, you must set `NETCDF_BUILD=true` in your environment,
+and follow the instructions below.
 
 Before compiling, you also must ensure that the following dependencies are installed on your system:
 
@@ -25,7 +31,7 @@ Before compiling, you also must ensure that the following dependencies are insta
 
 On Ubuntu:
 
-`apt install ibhdf5-serial-dev libnetcdf-dev`
+`apt install libhdf5-serial-dev libnetcdf-dev`
 
 On macOS:
 
