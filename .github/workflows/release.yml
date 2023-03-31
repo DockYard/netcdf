@@ -4,9 +4,9 @@ on:
     types: [published]
 
 env:
-  EXPLORER_BUILD: true
   RUST_TOOLCHAIN_VERSION: nightly-2022-08-16
   MIX_ENV: prod
+  NETCDF_BUILD: true
 
 jobs:
   build_release:

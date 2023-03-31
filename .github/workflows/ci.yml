@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  EXPLORER_BUILD: true
+  NETCDF_BUILD: true
   RUST_TOOLCHAIN_VERSION: nightly-2022-08-16
   MIX_ENV: test
 

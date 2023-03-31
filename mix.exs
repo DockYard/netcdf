@@ -2,10 +2,7 @@ defmodule NetCDF.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/DockYard/netcdf"
-  @version "0.2"
-
-  Application.put_env(:netcdf, :base_url, "#{@source_url}/releases/download/#{@version}")
-  Application.put_env(:netcdf, :version, @version)
+  @version "0.2.0"
 
   def project do
     [

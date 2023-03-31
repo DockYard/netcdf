@@ -1,11 +1,20 @@
 defmodule NetCDF.Native do
   @moduledoc false
+
+  mode = if Mix.env() in [:dev, :test], do: :debug, else: :release
+  force_build = mode == :debug or System.get_env("NETCDF_BUILD") in ["1", "true"]
+
+  mix_config = Mix.Project.config()
+  version = mix_config[:version]
+  github_url = mix_config[:package][:links]["GitHub"]
+
   use RustlerPrecompiled,
     otp_app: :netcdf,
     crate: "ex_netcdf",
-    base_url: Application.compile_env!(:netcdf, :base_url),
-    version: Application.compile_env!(:netcdf, :version)
-
+    base_url: "#{github_url}/releases/download/v#{version}",
+    version: version,
+    force_build: force_build,
+    mode: mode
 
   # netcdf::file
   def file_open(_filename), do: :erlang.nif_error(:nif_not_loaded)
