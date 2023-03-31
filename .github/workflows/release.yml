@@ -18,28 +18,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        otp_version: [24.2, 25.0]
-        elixir_version: [1.13, 1.14]
         nif: ["2.15", "2.16"]
         job:
           - {
               target: arm-unknown-linux-gnueabihf,
               os: ubuntu-20.04,
               use-cross: true,
+              manual-hdf5: true
             }
           - {
               target: aarch64-unknown-linux-gnu,
               os: ubuntu-20.04,
               use-cross: true,
+              manual-hdf5: true
             }
           - { target: aarch64-apple-darwin, os: macos-11 }
           - { target: x86_64-apple-darwin, os: macos-11 }
           - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04 }
-          - {
-              target: x86_64-unknown-linux-musl,
-              os: ubuntu-20.04,
-              use-cross: true,
-            }
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -53,10 +48,21 @@ jobs:
         with:
           toolchain: stable
           target: ${{ matrix.job.target }}
-      - name: Install dependencies
-        if: ${{ matrix.job.os == 'ubuntu-20.04'}}
+      - name: Install dependencies (Linux x86)
+        if: ${{ matrix.job.os == 'ubuntu-20.04' and !matrix.job.manual-hdf5 }}
         run: sudo apt install -y libhdf5-serial-dev libnetcdf-dev
-      - name: Install dependencies
+      - name: Install dependencies (Linux aarch64)
+        if: ${{ matrix.job.os == 'ubuntu-20.04' and matrix.job.manual-hdf5 }}
+        run: |
+          sudo apt install -y libnetcdf-dev
+          wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.9/src/hdf5-1.10.9.tar.gz
+          gzip -cd hdf5-1.10.9.tar.gz | tar xvf -
+          cd hdf5-1.10.9
+          ./configure --prefix=/usr/local/lib/hdf5 --enable-cxx
+          make
+          make install
+          echo "HDF5_DIR=/usr/local/lib/hdf5" >> $GITHUB_ENV
+      - name: Install dependencies (macOS)
         if: ${{ matrix.job.os == 'macos-11'}}
         run: brew install netcdf-cxx
       - name: Build the project
