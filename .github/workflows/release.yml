@@ -13,7 +13,7 @@ env:
 
 jobs:
   build_release:
-    name: Release NetCDF NIF ${{ matrix.nif }} - ${{ matrix.job.target }} (${{ matrix.job.os }})
+    name: Release NetCDF NIF ${{ matrix.nif }} - ${{ matrix.job.target }}
     runs-on: ${{ matrix.job.os }}
     strategy:
       fail-fast: false
@@ -62,6 +62,20 @@ jobs:
           make
           make install
           echo "HDF5_DIR=/usr/local/lib/hdf5" >> $GITHUB_ENV
+          echo "H5_PRINTF_LL_TEST_RUN=false" >> $GITHUB_ENV
+          echo "H5_PRINTF_LL_TEST_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
+          echo "H5_LDOUBLE_TO_LONG_SPECIAL_RUN=false" >> $GITHUB_ENV
+          echo "H5_LDOUBLE_TO_LONG_SPECIAL_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
+          echo "H5_LONG_TO_LDOUBLE_SPECIAL_RUN=false" >> $GITHUB_ENV
+          echo "H5_LONG_TO_LDOUBLE_SPECIAL_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
+          echo "H5_LDOUBLE_TO_LLONG_ACCURATE_RUN=false" >> $GITHUB_ENV
+          echo "H5_LDOUBLE_TO_LLONG_ACCURATE_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
+          echo "H5_LLONG_TO_LDOUBLE_CORRECT_RUN=false" >> $GITHUB_ENV
+          echo "H5_LLONG_TO_LDOUBLE_CORRECT_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
+          echo "H5_DISABLE_SOME_LDOUBLE_CONV_RUN=false" >> $GITHUB_ENV
+          echo "H5_DISABLE_SOME_LDOUBLE_CONV_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
+          echo "H5_NO_ALIGNMENT_RESTRICTIONS_RUN=false" >> $GITHUB_ENV
+          echo "H5_NO_ALIGNMENT_RESTRICTIONS_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
       - name: Install dependencies (macOS)
         if: ${{ matrix.job.os == 'macos-11'}}
         run: brew install netcdf-cxx
