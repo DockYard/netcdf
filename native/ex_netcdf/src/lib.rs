@@ -70,8 +70,7 @@ fn variable_values(
 fn get_variable_values(
     variable: &netcdf::variable::Variable,
 ) -> Result<(Value, rustler::types::atom::Atom), NetCDFError> {
-    let var_type = variable.vartype();
-    match var_type {
+    match variable.vartype() {
         VariableType::Basic(BasicType::Byte) => load_numeric_variable_values::<u8>(variable),
         VariableType::Basic(BasicType::Char) => load_numeric_variable_values::<i8>(variable),
         VariableType::Basic(BasicType::Ubyte) => load_numeric_variable_values::<u8>(variable),
