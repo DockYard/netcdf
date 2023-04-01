@@ -40,11 +40,15 @@ jobs:
           toolchain: stable
           target: ${{ matrix.job.target }}
       - name: Install dependencies
+        if: ${{ matrix.job.os != macos-11 }}
         run: |
           conda install -y -c conda-forge libnetcdf=4.8.1 hdf5=1.12.1
           echo "HDF5_DIR=${CONDA_PREFIX}"
           echo "NETCDF_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
           echo "RUSTFLAGS=-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib" >> $GITHUB_ENV
+      - name: Install dependencies (Mac)
+        if: ${{ matrix.job.os == macos-11 }}
+        run: brew install nco
       - name: Build the project
         id: build-crate
         uses: philss/rustler-precompiled-action@v1.0.0
