@@ -10,21 +10,8 @@ env:
   RUST_TOOLCHAIN_VERSION: nightly-2022-08-16
   MIX_ENV: prod
   NETCDF_BUILD: true
-  HDF5_DIR: /usr/local/lib/hdf5
-  H5_PRINTF_LL_TEST_RUN: false
-  H5_PRINTF_LL_TEST_RUN__TRYRUN_OUTPUT: false
-  H5_LDOUBLE_TO_LONG_SPECIAL_RUN: false
-  H5_LDOUBLE_TO_LONG_SPECIAL_RUN__TRYRUN_OUTPUT: false
-  H5_LONG_TO_LDOUBLE_SPECIAL_RUN: false
-  H5_LONG_TO_LDOUBLE_SPECIAL_RUN__TRYRUN_OUTPUT: false
-  H5_LDOUBLE_TO_LLONG_ACCURATE_RUN: false
-  H5_LDOUBLE_TO_LLONG_ACCURATE_RUN__TRYRUN_OUTPUT: false
-  H5_LLONG_TO_LDOUBLE_CORRECT_RUN: false
-  H5_LLONG_TO_LDOUBLE_CORRECT_RUN__TRYRUN_OUTPUT: false
-  H5_DISABLE_SOME_LDOUBLE_CONV_RUN: false
-  H5_DISABLE_SOME_LDOUBLE_CONV_RUN__TRYRUN_OUTPUT: false
-  H5_NO_ALIGNMENT_RESTRICTIONS_RUN: false
-  H5_NO_ALIGNMENT_RESTRICTIONS_RUN__TRYRUN_OUTPUT: false
+  CONDA_DIR: /opt/conda
+  HDF5_DIR: ${CONDA_DIR}
 
 jobs:
   build_release:
@@ -52,6 +39,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Install Conda
+        uses: actions/setup-conda@v1
+        with:
+          conda-channels: "conda-forge"
       - name: Extract project version
         shell: bash
         run: |
@@ -62,23 +53,10 @@ jobs:
         with:
           toolchain: stable
           target: ${{ matrix.job.target }}
-      - name: Install dependencies (Linux x86)
-        if: ${{ matrix.job.os == 'ubuntu-20.04' && !matrix.job.manual-hdf5 }}
-        run: sudo apt install -y libhdf5-serial-dev libnetcdf-dev
-      - name: Install dependencies (Linux aarch64)
-        if: ${{ matrix.job.os == 'ubuntu-20.04' && matrix.job.manual-hdf5 }}
+      - name: Install dependencies
         run: |
-          sudo apt install -y libnetcdf-dev
-          wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.9/src/hdf5-1.10.9.tar.gz
-          gzip -cd hdf5-1.10.9.tar.gz | tar xvf -
-          cd hdf5-1.10.9
-          ./configure --prefix=/usr/local/lib/hdf5 --enable-cxx
-          make
-          make install
-          echo "HDF5_DIR=/usr/local/lib/hdf5" >> $GITHUB_ENV
-      - name: Install dependencies (macOS)
-        if: ${{ matrix.job.os == 'macos-11'}}
-        run: brew install netcdf-cxx
+          conda install -c conda hdf5=1.12.1
+          conda install -c conda-forge libnetcdf=4.9.2
       - name: Build the project
         id: build-crate
         uses: philss/rustler-precompiled-action@v1.0.0
