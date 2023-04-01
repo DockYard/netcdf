@@ -24,15 +24,15 @@ jobs:
               target: arm-unknown-linux-gnueabihf,
               os: ubuntu-20.04,
               use-cross: true,
-              arch: armv7
+              compile-hdf5: true,
             }
           - {
               target: aarch64-unknown-linux-gnu,
               os: ubuntu-20.04,
               use-cross: true,
-              arch: aarch64
+              compile-hdf5: true,
             }
-          - { target: aarch64-apple-darwin, os: macos-11 }
+          - { target: aarch64-apple-darwin, os: macos-11, compile-hdf5: true }
           - { target: x86_64-apple-darwin, os: macos-11 }
           - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04 }
     steps:
@@ -59,7 +59,7 @@ jobs:
           echo "NETCDF_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
           echo "RUSTFLAGS=-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib" >> $GITHUB_ENV
       - name: Compile HDF5
-        if: ${{ matrix.job.use-cross }}
+        if: ${{ matrix.job.compile-hdf5 }}
         run: |
           wget -O hdf5.zip https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-1_12_1.zip
           unzip hdf5.zip
