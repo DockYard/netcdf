@@ -24,21 +24,21 @@ jobs:
               target: arm-unknown-linux-gnueabihf,
               os: ubuntu-20.04,
               use-cross: true,
-              conda-channel: "anaconda/label/linux-armv7l",
+              conda-channel: "conda-forge/label/linux-armv7l",
             }
           - {
               target: aarch64-unknown-linux-gnu,
               os: ubuntu-20.04,
               use-cross: true,
-              conda-channel: "anaconda/label/linux-aarch64",
+              conda-channel: "conda-forge/label/linux-aarch64",
             }
           - {
               target: aarch64-apple-darwin,
               os: macos-11,
-              conda-channel: "anaconda/label/osx-arm64",
+              conda-channel: "conda-forge/label/osx-arm64",
             }
-          - { target: x86_64-apple-darwin, os: macos-11, conda-channel: "anaconda" }
-          - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04, conda-channel: "anaconda" }
+          - { target: x86_64-apple-darwin, os: macos-11, conda-channel: "conda-forge" }
+          - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04, conda-channel: "conda-forge" }
     steps:
       - name: Checkout
         uses: actions/checkout@v3
