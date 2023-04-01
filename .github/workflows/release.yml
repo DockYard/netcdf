@@ -20,19 +20,11 @@ jobs:
       matrix:
         nif: ["2.15", "2.16"]
         job:
-          - {
-              target: arm-unknown-linux-gnueabihf,
-              os: ubuntu-20.04,
-              use-cross: true
-            }
-          - {
-              target: aarch64-unknown-linux-gnu,
-              os: ubuntu-20.04,
-              use-cross: true,
-            }
-          # - { target: aarch64-apple-darwin, os: macos-11 }
-          # - { target: x86_64-apple-darwin, os: macos-11 }
-          # - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04 }
+          - { target: arm-unknown-linux-gnueabihf, os: ubuntu-20.04 }
+          - { target: aarch64-unknown-linux-gnu, os: ubuntu-20.04 }
+          - { target: aarch64-apple-darwin, os: macos-11 }
+          - { target: x86_64-apple-darwin, os: macos-11 }
+          - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04 }
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -52,8 +44,9 @@ jobs:
           target: ${{ matrix.job.target }}
       - name: Install dependencies
         run: |
-          conda install -y -c conda-forge libnetcdf=4.8.1
+          conda install -y -c conda-forge libnetcdf=4.8.1 hdf5=1.12.1
           echo "HDF5_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
+          echo "NETCDF_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
           echo "RUSTFLAGS=-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib" >> $GITHUB_ENV
       - name: Build the project
         id: build-crate
