@@ -54,7 +54,7 @@ jobs:
         run: |
           conda install -y -c conda-forge libnetcdf=4.8.1
           echo "HDF5_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
-          echo "RUSTFLAGS=\"-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib\"" >> $GITHUB_ENV
+          echo "RUSTFLAGS=-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib" >> $GITHUB_ENV
       - name: Build the project
         id: build-crate
         uses: philss/rustler-precompiled-action@v1.0.0
