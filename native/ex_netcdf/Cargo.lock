@@ -166,9 +166,9 @@ dependencies = [
 
 [[package]]
 name = "netcdf"
-version = "0.7.0"
+version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9668c493289156ed0dce9472ea33ab7a6f6dfe4565a8433bd103995f8053b467"
+checksum = "3eacb0b9884794c66b38fb552ae20c7838e587b1f9aa9b3ec4f7024356b58829"
 dependencies = [
  "bitflags",
  "lazy_static",

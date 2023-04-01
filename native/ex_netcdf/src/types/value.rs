@@ -66,35 +66,6 @@ impl rustler::Encoder for Value {
     }
 }
 
-impl From<AttrValue> for Value {
-    fn from(value: AttrValue) -> Value {
-        match value {
-            AttrValue::Uchar(value) => Self::Uchar(value),
-            AttrValue::Schar(value) => Self::Schar(value),
-            AttrValue::Ushort(value) => Self::Ushort(value),
-            AttrValue::Short(value) => Self::Short(value),
-            AttrValue::Uint(value) => Self::Uint(value),
-            AttrValue::Int(value) => Self::Int(value),
-            AttrValue::Ulonglong(value) => Self::Ulonglong(value),
-            AttrValue::Longlong(value) => Self::Longlong(value),
-            AttrValue::Float(value) => Self::Float(value),
-            AttrValue::Double(value) => Self::Double(value),
-            AttrValue::Str(value) => Self::Str(value),
-            AttrValue::Uchars(value) => Self::Uchars(value),
-            AttrValue::Schars(value) => Self::Schars(value),
-            AttrValue::Ushorts(value) => Self::Ushorts(value),
-            AttrValue::Shorts(value) => Self::Shorts(value),
-            AttrValue::Uints(value) => Self::Uints(value),
-            AttrValue::Ints(value) => Self::Ints(value),
-            AttrValue::Ulonglongs(value) => Self::Ulonglongs(value),
-            AttrValue::Longlongs(value) => Self::Longlongs(value),
-            AttrValue::Floats(value) => Self::Floats(value),
-            AttrValue::Doubles(value) => Self::Doubles(value),
-            AttrValue::Strs(value) => Self::Strs(value),
-        }
-    }
-}
-
 impl From<Vec<u8>> for Value {
     fn from(value: Vec<u8>) -> Value {
         Self::Uchars(value)
@@ -158,5 +129,34 @@ impl From<Vec<f64>> for Value {
 impl From<Vec<String>> for Value {
     fn from(value: Vec<String>) -> Value {
         Self::Strs(value)
+    }
+}
+
+impl From<AttrValue> for Value {
+    fn from(value: AttrValue) -> Value {
+        match value {
+            AttrValue::Uchar(value) => Self::Uchar(value),
+            AttrValue::Schar(value) => Self::Schar(value),
+            AttrValue::Ushort(value) => Self::Ushort(value),
+            AttrValue::Short(value) => Self::Short(value),
+            AttrValue::Uint(value) => Self::Uint(value),
+            AttrValue::Int(value) => Self::Int(value),
+            AttrValue::Ulonglong(value) => Self::Ulonglong(value),
+            AttrValue::Longlong(value) => Self::Longlong(value),
+            AttrValue::Float(value) => Self::Float(value),
+            AttrValue::Double(value) => Self::Double(value),
+            AttrValue::Str(value) => Self::Str(value),
+            AttrValue::Uchars(value) => Self::Uchars(value),
+            AttrValue::Schars(value) => Self::Schars(value),
+            AttrValue::Ushorts(value) => Self::Ushorts(value),
+            AttrValue::Shorts(value) => Self::Shorts(value),
+            AttrValue::Uints(value) => Self::Uints(value),
+            AttrValue::Ints(value) => Self::Ints(value),
+            AttrValue::Ulonglongs(value) => Self::Ulonglongs(value),
+            AttrValue::Longlongs(value) => Self::Longlongs(value),
+            AttrValue::Floats(value) => Self::Floats(value),
+            AttrValue::Doubles(value) => Self::Doubles(value),
+            AttrValue::Strs(value) => Self::Strs(value),
+        }
     }
 }
