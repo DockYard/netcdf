@@ -20,26 +20,16 @@ jobs:
       matrix:
         nif: ["2.15", "2.16"]
         job:
-          - {
-              target: aarch64-unknown-linux-gnu,
-              os: ubuntu-20.04,
-              use-cross: true,
-              conda-channel: "conda-forge/linux-aarch64",
-            }
-          - {
-              target: aarch64-apple-darwin,
-              os: macos-11,
-              conda-channel: "conda-forge/osx-arm64",
-            }
-          - { target: x86_64-apple-darwin, os: macos-11, conda-channel: "conda-forge" }
-          - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04, conda-channel: "conda-forge" }
+          - { target: aarch64-apple-darwin, os: macos-11 }
+          - { target: x86_64-apple-darwin, os: macos-11 }
+          - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04 }
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install Conda
         uses: s-weigand/setup-conda@v1
         with:
-          conda-channels: ${{ matrix.job.conda-channel }}
+          conda-channels: conda-forge
       - name: Extract project version
         shell: bash
         run: |
@@ -52,22 +42,7 @@ jobs:
           target: ${{ matrix.job.target }}
       - name: Install dependencies
         run: |
-          echo "CMAKE_C_FLAGS_GENERAL=\
-          -DH5_PRINTF_LL_TEST_RUN=false\
-          -DH5_PRINTF_LL_TEST_RUN__TRYRUN_OUTPUT=false\
-          -D H5_LDOUBLE_TO_LONG_SPECIAL_RUN=false\
-          -D H5_LDOUBLE_TO_LONG_SPECIAL_RUN__TRYRUN_OUTPUT=false\
-          -D H5_LONG_TO_LDOUBLE_SPECIAL_RUN=false\
-          -D H5_LONG_TO_LDOUBLE_SPECIAL_RUN__TRYRUN_OUTPUT=false\
-          -D H5_LDOUBLE_TO_LLONG_ACCURATE_RUN=false\
-          -D H5_LDOUBLE_TO_LLONG_ACCURATE_RUN__TRYRUN_OUTPUT=false\
-          -D H5_LLONG_TO_LDOUBLE_CORRECT_RUN=false\
-          -D H5_LLONG_TO_LDOUBLE_CORRECT_RUN__TRYRUN_OUTPUT=false\
-          -D H5_DISABLE_SOME_LDOUBLE_CONV_RUN=false\
-          -D H5_DISABLE_SOME_LDOUBLE_CONV_RUN__TRYRUN_OUTPUT=false\
-          -D H5_NO_ALIGNMENT_RESTRICTIONS_RUN=false\
-          -D H5_NO_ALIGNMENT_RESTRICTIONS_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
-          conda install -y -c ${{ matrix.job.conda-channel }} libnetcdf=4.8.1 hdf5=1.12.1
+          conda install -y -c conda-forge libnetcdf=4.8.1 hdf5=1.12.1
           echo "HDF5_DIR=${CONDA_PREFIX}"
           echo "NETCDF_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
           echo "RUSTFLAGS=-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib" >> $GITHUB_ENV
