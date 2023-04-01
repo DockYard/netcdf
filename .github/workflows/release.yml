@@ -52,22 +52,23 @@ jobs:
           target: ${{ matrix.job.target }}
       - name: Install dependencies
         run: |
-          echo "H5_PRINTF_LL_TEST_RUN=false" >> $GITHUB_ENV
-          echo "H5_PRINTF_LL_TEST_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
-          echo "H5_LDOUBLE_TO_LONG_SPECIAL_RUN=false" >> $GITHUB_ENV
-          echo "H5_LDOUBLE_TO_LONG_SPECIAL_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
-          echo "H5_LONG_TO_LDOUBLE_SPECIAL_RUN=false" >> $GITHUB_ENV
-          echo "H5_LONG_TO_LDOUBLE_SPECIAL_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
-          echo "H5_LDOUBLE_TO_LLONG_ACCURATE_RUN=false" >> $GITHUB_ENV
-          echo "H5_LDOUBLE_TO_LLONG_ACCURATE_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
-          echo "H5_LLONG_TO_LDOUBLE_CORRECT_RUN=false" >> $GITHUB_ENV
-          echo "H5_LLONG_TO_LDOUBLE_CORRECT_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
-          echo "H5_DISABLE_SOME_LDOUBLE_CONV_RUN=false" >> $GITHUB_ENV
-          echo "H5_DISABLE_SOME_LDOUBLE_CONV_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
-          echo "H5_NO_ALIGNMENT_RESTRICTIONS_RUN=false" >> $GITHUB_ENV
-          echo "H5_NO_ALIGNMENT_RESTRICTIONS_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
+          echo "CMAKE_C_FLAGS_GENERAL=\
+          -DH5_PRINTF_LL_TEST_RUN=false\
+          -DH5_PRINTF_LL_TEST_RUN__TRYRUN_OUTPUT=false\
+          -D H5_LDOUBLE_TO_LONG_SPECIAL_RUN=false\
+          -D H5_LDOUBLE_TO_LONG_SPECIAL_RUN__TRYRUN_OUTPUT=false\
+          -D H5_LONG_TO_LDOUBLE_SPECIAL_RUN=false\
+          -D H5_LONG_TO_LDOUBLE_SPECIAL_RUN__TRYRUN_OUTPUT=false\
+          -D H5_LDOUBLE_TO_LLONG_ACCURATE_RUN=false\
+          -D H5_LDOUBLE_TO_LLONG_ACCURATE_RUN__TRYRUN_OUTPUT=false\
+          -D H5_LLONG_TO_LDOUBLE_CORRECT_RUN=false\
+          -D H5_LLONG_TO_LDOUBLE_CORRECT_RUN__TRYRUN_OUTPUT=false\
+          -D H5_DISABLE_SOME_LDOUBLE_CONV_RUN=false\
+          -D H5_DISABLE_SOME_LDOUBLE_CONV_RUN__TRYRUN_OUTPUT=false\
+          -D H5_NO_ALIGNMENT_RESTRICTIONS_RUN=false\
+          -D H5_NO_ALIGNMENT_RESTRICTIONS_RUN__TRYRUN_OUTPUT=false" >> $GITHUB_ENV
           conda install -y -c ${{ matrix.job.conda-channel }} libnetcdf=4.8.1 hdf5=1.12.1
-          echo "HDF5_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
+          echo "HDF5_DIR=${CONDA_PREFIX}"
           echo "NETCDF_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
           echo "RUSTFLAGS=-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib" >> $GITHUB_ENV
       - name: Build the project
