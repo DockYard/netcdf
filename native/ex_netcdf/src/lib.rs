@@ -25,6 +25,7 @@ rustler::atoms! {
     u64_t = "u64",
     f32_t = "f32",
     f64_t = "f64",
+    string_t = "string"
 }
 
 fn on_load(env: Env, _info: Term) -> bool {
@@ -137,7 +138,7 @@ fn load_string_variable_values(
         values.push(value);
     }
 
-    Ok((Value::from(values), non_numeric()))
+    Ok((Value::from(values), string_t()))
 }
 
 fn as_type_atom(type_name: &str) -> rustler::types::atom::Atom {

@@ -47,5 +47,22 @@ defmodule NetCDF.VariableTest do
                      )
                    end
     end
+
+    test "loads string variable" do
+      filename = Path.join(:code.priv_dir(:netcdf), "string_test.nc")
+      {:ok, file} = File.open(filename)
+
+      assert %File{filename: ^filename, resource: _, variables: ["string_var"]} = file
+
+      assert {:ok,
+              %Variable{
+                name: "string_var",
+                value: ~w(Hello world ! This is a test),
+                type: :string,
+                attributes: attributes
+              }} = Variable.load(file, "string_var")
+
+      assert %{} == attributes
+    end
   end
 end
