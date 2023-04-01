@@ -71,70 +71,53 @@ fn get_variable_values(
     variable: &netcdf::variable::Variable,
 ) -> Result<(Value, rustler::types::atom::Atom), NetCDFError> {
     let var_type = variable.vartype();
-    let type_name = var_type.name();
-    let netcdf_error = netcdf::error::Error::Str(format!("unable to load type {}", type_name));
-    let error = NetCDFError::from(netcdf_error);
-
     match var_type {
-        VariableType::Basic(BasicType::Byte) => {
-            load_numeric_variable_values::<u8>(&variable, &type_name)
-        }
-        VariableType::Basic(BasicType::Char) => {
-            load_numeric_variable_values::<i8>(&variable, &type_name)
-        }
-        VariableType::Basic(BasicType::Ubyte) => {
-            load_numeric_variable_values::<u8>(&variable, &type_name)
-        }
-        VariableType::Basic(BasicType::Short) => {
-            load_numeric_variable_values::<i16>(&variable, &type_name)
-        }
-        VariableType::Basic(BasicType::Ushort) => {
-            load_numeric_variable_values::<u16>(&variable, &type_name)
-        }
-        VariableType::Basic(BasicType::Int) => {
-            load_numeric_variable_values::<i32>(&variable, &type_name)
-        }
-        VariableType::Basic(BasicType::Uint) => {
-            load_numeric_variable_values::<u32>(&variable, &type_name)
-        }
-        VariableType::Basic(BasicType::Int64) => {
-            load_numeric_variable_values::<i64>(&variable, &type_name)
-        }
-        VariableType::Basic(BasicType::Uint64) => {
-            load_numeric_variable_values::<u64>(&variable, &type_name)
-        }
-        VariableType::Basic(BasicType::Float) => {
-            load_numeric_variable_values::<f32>(&variable, &type_name)
-        }
-        VariableType::Basic(BasicType::Double) => {
-            load_numeric_variable_values::<f64>(&variable, &type_name)
-        }
-        VariableType::String => load_string_variable_values(&variable),
-        _ => Err(netcdf::error::Error::WrongDataset),
+        VariableType::Basic(BasicType::Byte) => load_numeric_variable_values::<u8>(variable),
+        VariableType::Basic(BasicType::Char) => load_numeric_variable_values::<i8>(variable),
+        VariableType::Basic(BasicType::Ubyte) => load_numeric_variable_values::<u8>(variable),
+        VariableType::Basic(BasicType::Short) => load_numeric_variable_values::<i16>(variable),
+        VariableType::Basic(BasicType::Ushort) => load_numeric_variable_values::<u16>(variable),
+        VariableType::Basic(BasicType::Int) => load_numeric_variable_values::<i32>(variable),
+        VariableType::Basic(BasicType::Uint) => load_numeric_variable_values::<u32>(variable),
+        VariableType::Basic(BasicType::Int64) => load_numeric_variable_values::<i64>(variable),
+        VariableType::Basic(BasicType::Uint64) => load_numeric_variable_values::<u64>(variable),
+        VariableType::Basic(BasicType::Float) => load_numeric_variable_values::<f32>(variable),
+        VariableType::Basic(BasicType::Double) => load_numeric_variable_values::<f64>(variable),
+        VariableType::String => load_string_variable_values(variable),
+        _ => Err(error::NetCDFError::NetCDF(
+            netcdf::error::Error::WrongDataset,
+        )),
     }
-    .map_err(|_| error)
 }
 
 fn load_numeric_variable_values<T>(
     variable: &netcdf::variable::Variable,
-    type_name: &str,
-) -> Result<(Value, rustler::types::atom::Atom), netcdf::error::Error>
+) -> Result<(Value, rustler::types::atom::Atom), NetCDFError>
 where
     Value: From<Vec<T>>,
     T: netcdf::NcPutGet,
 {
-    let value = variable.values::<T, Extents>(All)?;
+    let var_type = variable.vartype();
+    let type_name = var_type.name();
+    let error = netcdf::error::Error::Str(format!("unable to load type {}", type_name));
+
+    let value = variable
+        .values::<T, Extents>(All)
+        .map_err(|_| error::NetCDFError::NetCDF(error))?;
     Ok((Value::from(value), as_type_atom(&type_name)))
 }
 
 fn load_string_variable_values(
     variable: &netcdf::variable::Variable,
-) -> Result<(Value, rustler::types::atom::Atom), netcdf::error::Error> {
+) -> Result<(Value, rustler::types::atom::Atom), NetCDFError> {
     let time_len = variable.len() as usize;
     let mut values: Vec<String> = Vec::with_capacity(time_len);
 
     for i in 0..time_len {
-        let value: String = variable.string_value::<Extents>(i.into())?;
+        let error = netcdf::error::Error::Str("unable to load string variable".to_string());
+        let value: String = variable
+            .string_value::<Extents>(i.into())
+            .map_err(|_| error::NetCDFError::NetCDF(error))?;
         values.push(value);
     }
 
