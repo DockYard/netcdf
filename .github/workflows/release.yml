@@ -13,15 +13,25 @@ env:
 
 jobs:
   build_release:
-    name: Release NetCDF NIF ${{ matrix.nif }} - ${{ matrix.job.target }}
+    name: Release ${{ matrix.nif }} - ${{ matrix.job.target }}
     runs-on: ${{ matrix.job.os }}
     strategy:
       fail-fast: false
       matrix:
         nif: ["2.15", "2.16"]
         job:
-          - { target: arm-unknown-linux-gnueabihf, os: ubuntu-20.04 }
-          - { target: aarch64-unknown-linux-gnu, os: ubuntu-20.04 }
+          - {
+              target: arm-unknown-linux-gnueabihf,
+              os: ubuntu-20.04,
+              use-cross: true,
+              arch: armv7
+            }
+          - {
+              target: aarch64-unknown-linux-gnu,
+              os: ubuntu-20.04,
+              use-cross: true,
+              arch: aarch64
+            }
           - { target: aarch64-apple-darwin, os: macos-11 }
           - { target: x86_64-apple-darwin, os: macos-11 }
           - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04 }
@@ -48,6 +58,16 @@ jobs:
           echo "HDF5_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
           echo "NETCDF_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
           echo "RUSTFLAGS=-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib" >> $GITHUB_ENV
+      - name: Compile HDF5
+        if: ${{ job.use-cross }}
+        run: |
+          wget -O hdf5.zip https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-1_12_1.zip
+          unzip hdf5.zip
+          cd hdf5-hdf5-1_12_1
+          echo "HDF5_DIR=/usr/local/hdf5" >> $GITHUB_ENV
+          ./configure --prefix=${HDF5_DIR}
+          make
+          make install
       - name: Build the project
         id: build-crate
         uses: philss/rustler-precompiled-action@v1.0.0
