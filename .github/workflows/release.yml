@@ -59,7 +59,7 @@ jobs:
           echo "NETCDF_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
           echo "RUSTFLAGS=-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib" >> $GITHUB_ENV
       - name: Compile HDF5
-        if: ${{ job.use-cross }}
+        if: ${{ matrix.job.use-cross }}
         run: |
           wget -O hdf5.zip https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-1_12_1.zip
           unzip hdf5.zip
