@@ -19,15 +19,20 @@ end
 ### Dependencies
 
 For usage, you don't need any dependencies installed.
-The library uses `:rustler_precompiled` to fetch compiled versions.
+The library uses `:rustler_precompiled` to fetch compiled versions for the following targets:
 
-If you want to compile locally, you must set `NETCDF_BUILD=true` in your environment,
-and follow the instructions below.
+- x86_64-apple-darwin
+- x86_64-unknown-linux-gnu
+- aarch64-apple-darwin
+- aarch64-unknown-linux-gnu
+
+If you want to compile locally or if you are running on an unsupported target,
+you must set `NETCDF_BUILD=true` in your environment, and follow the instructions below.
 
 Before compiling, you also must ensure that the following dependencies are installed on your system:
 
-- hdf5
-- libnetcdf
+- hdf5@1.12.1
+- libnetcdf@4.8.1
 
 On Ubuntu:
 
