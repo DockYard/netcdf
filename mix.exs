@@ -33,7 +33,7 @@ defmodule NetCDF.MixProject do
   defp deps do
     [
       {:rustler_precompiled, "~> 0.6.1"},
-      {:rustler, "~> 0.26.0"},
+      {:rustler, "~> 0.26.0", optional: true},
       {:ex_doc, "~> 0.29.0", only: :docs}
     ]
   end
