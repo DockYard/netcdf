@@ -15,12 +15,10 @@ defmodule NetCDF.Native do
     version: version,
     force_build: force_build,
     targets: [
-      "arm-unknown-linux-gnueabihf",
       "aarch64-unknown-linux-gnu",
       "aarch64-apple-darwin",
       "x86_64-apple-darwin",
-      "x86_64-unknown-linux-gnu",
-      "x86_64-unknown-linux-musl"
+      "x86_64-unknown-linux-gnu"
     ],
     mode: mode
 

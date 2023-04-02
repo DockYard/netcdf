@@ -2,7 +2,7 @@ defmodule NetCDF.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/DockYard/netcdf"
-  @version "0.2.0"
+  @version File.read!("VERSION")
 
   def project do
     [

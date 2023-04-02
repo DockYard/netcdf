@@ -37,6 +37,15 @@ On macOS:
 
 `brew install netcdf-cxx`, which will also bring `hdf5` as a dependency
 
+Conda can also be used to install the dependencies instead:
+
+```shell
+conda install -y -c conda-forge libnetcdf=4.8.1 hdf5=1.12.1
+echo "HDF5_DIR=${CONDA_PREFIX}"
+echo "NETCDF_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
+echo "RUSTFLAGS=-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib" >> $GITHUB_ENV
+```
+
 ### Utilities
 
 Although not necessary for the library to work, `ncks` is helpful for downloading `.nc` files in the correct way,
