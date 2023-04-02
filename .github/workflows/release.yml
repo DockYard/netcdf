@@ -2,9 +2,6 @@ name: Elixir CI
 on:
   release:
     types: [published]
-  push:
-    branches:
-      - main
 
 env:
   RUST_TOOLCHAIN_VERSION: nightly-2022-08-16
