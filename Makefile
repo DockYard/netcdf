@@ -1,6 +1,6 @@
-# examples:
-# NIF=2.15 make host-release
-# NIF=2.15 make gnu-docker-release
+# Usage:
+# Run `make` or `make all` to generate all combinations of OS=linux/mac and NIF_VERSION=2.15/2.16
+# for the host architecture. Mostly useful for aarch64 because CI takes care of x86_64 releases.
 
 VALID_NIF_VERSIONS := 2.15 2.16
 
