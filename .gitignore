@@ -61,6 +61,9 @@ erl_crash.dump
 
 /priv
 /priv/native/libex_netcdf
+/release_build
+*.so.tar.gz
+
 
 ### Elixir Patch ###
 

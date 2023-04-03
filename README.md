@@ -11,25 +11,45 @@ by adding `netcdf` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:netcdf, "~> 0.1.0"}
+    {:netcdf, "~> 0.2.0"}
   ]
 end
 ```
 
 ### Dependencies
 
+For usage, you don't need any dependencies installed.
+The library uses `:rustler_precompiled` to fetch compiled versions for the following targets:
+
+- x86_64-apple-darwin
+- x86_64-unknown-linux-gnu
+- aarch64-apple-darwin
+- aarch64-unknown-linux-gnu
+
+If you want to compile locally or if you are running on an unsupported target,
+you must set `NETCDF_BUILD=true` in your environment, and follow the instructions below.
+
 Before compiling, you also must ensure that the following dependencies are installed on your system:
 
-- hdf5
-- libnetcdf
+- hdf5@1.12.1
+- libnetcdf@4.8.1
 
 On Ubuntu:
 
-`apt install ibhdf5-serial-dev libnetcdf-dev`
+`apt install libhdf5-serial-dev libnetcdf-dev`
 
 On macOS:
 
 `brew install netcdf-cxx`, which will also bring `hdf5` as a dependency
+
+Conda can also be used to install the dependencies instead:
+
+```shell
+conda install -y -c conda-forge libnetcdf=4.8.1 hdf5=1.12.1
+echo "HDF5_DIR=${CONDA_PREFIX}"
+echo "NETCDF_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
+echo "RUSTFLAGS=-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib" >> $GITHUB_ENV
+```
 
 ### Utilities
 

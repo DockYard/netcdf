@@ -1,0 +1,69 @@
+name: Elixir CI
+on:
+  release:
+    types: [published]
+
+env:
+  RUST_TOOLCHAIN_VERSION: nightly-2022-08-16
+  MIX_ENV: prod
+  NETCDF_BUILD: true
+
+jobs:
+  build_release:
+    name: Release ${{ matrix.nif }} - ${{ matrix.job.target }}
+    runs-on: ${{ matrix.job.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        nif: ["2.15", "2.16"]
+        job:
+          - { target: x86_64-apple-darwin, os: macos-11 }
+          - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04 }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Conda
+        uses: s-weigand/setup-conda@v1
+        with:
+          conda-channels: conda-forge
+      - name: Extract project version
+        shell: bash
+        run: |
+          # Get the project version from mix.exs
+          echo "PROJECT_VERSION=$(sed -n 's/^  @version "\(.*\)"/\1/p' mix.exs | head -n1)" >> $GITHUB_ENV
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          target: ${{ matrix.job.target }}
+      - name: Install dependencies
+        if: ${{ matrix.job.os != 'macos-11' }}
+        run: |
+          conda install -y -c conda-forge libnetcdf=4.8.1 hdf5=1.12.1
+          echo "HDF5_DIR=${CONDA_PREFIX}"
+          echo "NETCDF_DIR=${CONDA_PREFIX}" >> $GITHUB_ENV
+          echo "RUSTFLAGS=-C link-args=-Wl,-rpath,$CONDA_PREFIX/lib" >> $GITHUB_ENV
+      - name: Install dependencies (Mac)
+        if: ${{ matrix.job.os == 'macos-11' }}
+        run: brew install nco
+      - name: Build the project
+        id: build-crate
+        uses: philss/rustler-precompiled-action@v1.0.0
+        with:
+          project-name: ex_netcdf
+          project-version: ${{ env.PROJECT_VERSION }}
+          target: ${{ matrix.job.target }}
+          nif-version: ${{ matrix.nif }}
+          use-cross: ${{ matrix.job.use-cross }}
+          project-dir: "native/ex_netcdf"
+      - name: Artifact upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.build-crate.outputs.file-name }}
+          path: ${{ steps.build-crate.outputs.file-path }}
+      - name: Publish archives and packages
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ${{ steps.build-crate.outputs.file-path }}
+        if: startsWith(github.ref, 'refs/tags/')
