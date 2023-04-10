@@ -64,6 +64,8 @@ erl_crash.dump
 /release_build
 *.so.tar.gz
 
+checksum-*.exs
+
 
 ### Elixir Patch ###
 

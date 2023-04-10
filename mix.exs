@@ -2,7 +2,7 @@ defmodule NetCDF.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/DockYard/netcdf"
-  @version File.read!("VERSION")
+  @version File.read!(Path.join(__DIR__, "VERSION")) |> String.trim()
 
   def project do
     [
@@ -47,7 +47,9 @@ defmodule NetCDF.MixProject do
         "lib",
         "native",
         "mix.exs",
-        "LICENSE"
+        "LICENSE",
+        "VERSION",
+        "checksum-*.exs"
       ],
       exclude_patterns: [
         ~r"native(/[^/]+)*/target"

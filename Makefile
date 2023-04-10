@@ -41,6 +41,7 @@ all:
 		$(MAKE) gnu-docker-release NIF_VERSION=$(nif_version); \
 		$(MAKE) host-release NIF_VERSION=$(nif_version); \
 	)
+	@mix rustler_precompiled.download NetCDF.Native --all --print
 
 .PHONY: validate_nif_env
 validate_nif_env:
