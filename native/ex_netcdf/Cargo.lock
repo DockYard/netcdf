@@ -63,6 +63,7 @@ dependencies = [
 name = "ex_netcdf"
 version = "0.1.0"
 dependencies = [
+ "curl-sys",
  "ndarray",
  "netcdf",
  "netcdf-sys",
